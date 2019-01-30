@@ -9,7 +9,8 @@ public class KinematicRelMotGunController : MonoBehaviour
     private float maxLength = 24.5f;
     [SerializeField]
     private KinematicBallController ballController;
-    private float ballUpAcc = 3f;
+    [SerializeField]
+    private float ballUpSpeed = 3f;
 
     void Update()
     {
@@ -21,11 +22,13 @@ public class KinematicRelMotGunController : MonoBehaviour
         }
         transform.position = new Vector3(transform.position.x, transform.position.y,
             newZ);
-        //DEBUG
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Trigger")) return;
+        Destroy(other);
+        Shoot();
     }
 
     void Shoot()
@@ -33,8 +36,7 @@ public class KinematicRelMotGunController : MonoBehaviour
         if(ballController != null)
         {
             ballController.transform.parent = null;
-            //TODO: Setup ball up acceleration in a way that it can reach the gun
-            ballController.Launch(new Vector3(0, -9.81f, 0), new Vector3(0, 100f, speed));
+            ballController.Launch(new Vector3(0, -9.81f, 0), new Vector3(0, ballUpSpeed, speed));
         }
     }
 
