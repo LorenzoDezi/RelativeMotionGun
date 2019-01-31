@@ -11,6 +11,7 @@ public class KinematicRelMotGunController : MonoBehaviour
     private KinematicBallController ballController;
     [SerializeField]
     private float ballUpSpeed = 3f;
+    private bool hasShoot = false;
 
     void Update()
     {
@@ -27,8 +28,9 @@ public class KinematicRelMotGunController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Trigger")) return;
-        Destroy(other);
-        Shoot();
+        if (!hasShoot)
+            Shoot();
+        hasShoot = !hasShoot;
     }
 
     void Shoot()
