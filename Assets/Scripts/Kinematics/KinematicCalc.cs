@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Kinematic
+namespace Kinematics
 {
 
     public class KinematicCalc

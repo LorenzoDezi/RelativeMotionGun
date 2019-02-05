@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Gun
   - Trigger
+  - EndTrack
   layers:
   - Default
   - TransparentFX
