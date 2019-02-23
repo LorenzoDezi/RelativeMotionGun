@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   ball: {fileID: 1185725434}
-  ballUpSpeed: 3
+  ballUpSpeed: 12
 --- !u!1001 &199262789
 PrefabInstance:
   m_ObjectHideFlags: 0

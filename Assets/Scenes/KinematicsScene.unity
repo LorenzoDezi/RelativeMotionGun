@@ -244,7 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   ballController: {fileID: 1185725435}
-  ballUpSpeed: 20
+  ballUpSpeed: 13
 --- !u!1 &157152563
 GameObject:
   m_ObjectHideFlags: 0
