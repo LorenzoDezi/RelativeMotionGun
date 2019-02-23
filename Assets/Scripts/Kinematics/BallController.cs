@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace Kinematics
 {
-    public class BallController : MonoBehaviour
+    public class BallController : MonoBehaviour, IAcceleration, IVelocity
     {
         private KinematicCalc kinematicCalc = null;
         //The initial position at which the ball will be reset
         //when it enters the gun collider
         private Vector3 initPosition;
+        //Used only for interface need
+        private Vector3 forwardSpeed;
 
         public void Launch(Vector3 acceleration, Vector3 speed)
         {
@@ -40,6 +42,31 @@ namespace Kinematics
             transform.localPosition = initPosition;
         }
 
+        public Vector3 GetAcceleration()
+        {
+            if (kinematicCalc != null)
+                return kinematicCalc.CurrentAcceleration;
+            else
+                return Vector3.zero;
+        }
+
+        public Vector3 GetVelocity()
+        {
+            if (kinematicCalc != null)
+                return kinematicCalc.CurrentSpeed;
+            else
+                return forwardSpeed;
+        }
+
+        /// <summary>
+        /// The forward speed is set by the relative motion gun,
+        /// it is necessary only for the GetVelocity() method.
+        /// </summary>
+        /// <param name="forwardSpeed"></param>
+        public void SetForwardSpeed(Vector3 forwardSpeed)
+        {
+            this.forwardSpeed = forwardSpeed;
+        }
     }
 }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Dynamics
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class RelMotGunController : MonoBehaviour
+    public class RelMotGunController : MonoBehaviour, IAcceleration, IVelocity
     {
         [SerializeField]
         private float speed = 25f;
@@ -33,11 +33,21 @@ namespace Dynamics
             }
         }
 
-        //TODO: Refactor brake e direction
         public void Brake()
         {
             speed = -speed;
             GetComponent<Rigidbody>().velocity = speed * transform.forward;
+        }
+
+        public Vector3 GetAcceleration()
+        {
+            //The rel mot gun in the dynamics scene is not accelerated
+            return Vector3.zero;
+        }
+
+        public Vector3 GetVelocity()
+        {
+            return GetComponent<Rigidbody>().velocity;
         }
     }
 }

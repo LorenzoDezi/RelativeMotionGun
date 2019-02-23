@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Dynamics.Forces
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class RelMotGunController : MonoBehaviour
+    public class RelMotGunController : MonoBehaviour, IAcceleration, IVelocity
     {
         [SerializeField]
         private float accIntensity = 5f;
@@ -28,21 +28,35 @@ namespace Dynamics.Forces
         [SerializeField]
         private Vector3 centerOfMass;
         private bool isBraking = false;
+
         private float ballDrag = 0f;
         [SerializeField]
         private float friction = 0.2f;
         [SerializeField]
         private float frictionCorrection = 1.25f;
 
+        private Vector3 lastVelocity;
+        [SerializeField]
+        private float timeStep = 1f;
+        private float lastTime;
+
         private void Start()
         {
             GetComponent<Rigidbody>().AddForce(transform.forward * accIntensity, ForceMode.Force);
             GetComponent<Rigidbody>().centerOfMass = centerOfMass;
+            lastVelocity = GetComponent<Rigidbody>().velocity;
+            lastTime = Time.fixedTime;
         }
 
         private void FixedUpdate()
         {
             var rigBody = GetComponent<Rigidbody>();
+            //Check for the last velocity value after the timestep
+            if (Time.fixedTime - lastTime >= timeStep)
+            {
+                lastVelocity = rigBody.velocity;
+                lastTime = Time.fixedTime;
+            }
             var currVelocity = Mathf.Abs(rigBody.velocity.z);
             if (isBraking)
             {
@@ -51,6 +65,14 @@ namespace Dynamics.Forces
             }
             else if (currVelocity < maxVelocity)
                 rigBody.AddForce(transform.forward * rigBody.mass * accIntensity, ForceMode.Force);
+        }
+
+        public Vector3 GetAcceleration()
+        {
+            var currVelocity = GetComponent<Rigidbody>().velocity;
+            if (Mathf.Approximately(currVelocity.z, lastVelocity.z))
+                return Vector3.zero;
+            return (currVelocity - lastVelocity) / timeStep;
         }
 
         public void Brake(Vector3 direction)
@@ -77,6 +99,10 @@ namespace Dynamics.Forces
                 isBraking = false;
         }
 
+        public Vector3 GetVelocity()
+        {
+            return GetComponent<Rigidbody>().velocity;
+        }
     }
 }
 

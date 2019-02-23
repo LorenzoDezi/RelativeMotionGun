@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Kinematics
 {
-    public class RelMotGunController : MonoBehaviour
+    public class RelMotGunController : MonoBehaviour, IAcceleration, IVelocity 
     {
         [SerializeField]
         private float speed = 5f;
@@ -15,6 +15,13 @@ namespace Kinematics
         private float ballUpSpeed = 3f;
         private bool hasShoot = false;
 
+
+        private void Start()
+        {
+            if (ballController != null)
+                ballController.SetForwardSpeed(transform.forward * speed);
+        }
+
         void Update()
         {
             float newZ = transform.position.z + speed * Time.deltaTime;
@@ -22,6 +29,8 @@ namespace Kinematics
             {
                 speed = -speed;
                 newZ = transform.position.z + speed * Time.deltaTime;
+                if (ballController != null)
+                    ballController.SetForwardSpeed(transform.forward * speed);
             }
             transform.position = new Vector3(transform.position.x, transform.position.y,
                 newZ);
@@ -44,9 +53,15 @@ namespace Kinematics
             }
         }
 
-        public float GetSpeed()
+        public Vector3 GetAcceleration()
         {
-            return speed;
+            //The rel motion gun is not accelerated in the Kinematics scene
+            return Vector3.zero;
+        }
+
+        public Vector3 GetVelocity()
+        {
+            return transform.forward * speed;
         }
     }
 
