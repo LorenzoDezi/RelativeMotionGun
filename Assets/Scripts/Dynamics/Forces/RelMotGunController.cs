@@ -26,8 +26,9 @@ namespace Dynamics.Forces
         [SerializeField]
         private Vector3 centerOfMass;
         private bool isBraking = false;
-        private float timeFromShoot;
+        private float timeWhenShoot;
         private float ballDrag = 0f;
+        private Vector3 Velocity0;
         [SerializeField]
         private float friction = 0.2f;
         [SerializeField]
@@ -59,14 +60,14 @@ namespace Dynamics.Forces
             if (isBraking)
             {
                 //Calculation to set the proper force in order to catch the ball
-                timeFromShoot = Time.fixedTime - timeFromShoot;
-                var frictionForceCorrection = friction * frictionCorrection * rigBody.mass * 9.81f;
-                var dragCorrection = (-ballDrag) * ball.velocity.z / timeFromShoot;
-                var velGunCorrection = rigBody.velocity.z / timeFromShoot;
-                var velBallCorrection = ball.velocity.z / timeFromShoot;
-                rigBody.AddForce(transform.forward * (dragCorrection + frictionForceCorrection 
-                        - velGunCorrection + velBallCorrection), 
-                    ForceMode.Force);
+                float timeFromShoot = Time.fixedTime - timeWhenShoot;
+                var frictionForceCorrection = friction * frictionCorrection * 9.81f;
+                var dragCorrection = 2 * Mathf.Exp(-ballDrag * timeFromShoot) * Velocity0.z / timeFromShoot;
+                var velGunCorrection = 2 * Velocity0.z / timeFromShoot;
+                if(currVelocity < Mathf.Abs(ball.velocity.z))
+                    rigBody.AddForce(transform.forward * rigBody.mass * (dragCorrection + frictionForceCorrection 
+                            - velGunCorrection), 
+                        ForceMode.Force);
             }
             else if (currVelocity < maxVelocity)
                 rigBody.AddForce(transform.forward * rigBody.mass * accIntensity, ForceMode.Force);
@@ -93,8 +94,10 @@ namespace Dynamics.Forces
             {
                 Rigidbody rigBody = GetComponent<Rigidbody>();
                 ballDrag = ball.drag;
+                //Velocity0 is needed for brake calculation. The same for gun and ball.
+                Velocity0 = ball.velocity;
                 isBraking = true;
-                timeFromShoot = Time.fixedTime;
+                timeWhenShoot = Time.fixedTime;
                 ball.AddForce(Vector3.up * shootUpIntensity, ForceMode.Impulse);
             }
         }
