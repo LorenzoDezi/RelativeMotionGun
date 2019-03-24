@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 157152564}
-  m_IndirectSpecularColor: {r: 0.49780262, g: 0.49780262, b: 0.49780262, a: 1}
+  m_IndirectSpecularColor: {r: 0.90047646, g: 0.93246245, b: 0.9334618, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -523,6 +523,14 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 45843379, guid: 31be86ee3d7db79448712619453a4a4d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 42.81006
+      objectReference: {fileID: 0}
+    - target: {fileID: 45843379, guid: 31be86ee3d7db79448712619453a4a4d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -17.619995
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31be86ee3d7db79448712619453a4a4d, type: 3}
 --- !u!1 &1185725429
@@ -738,14 +746,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1244544710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2d90fdcee16f2b4a82304dcdc992021, type: 3}
+  m_Script: {fileID: 11500000, guid: e26b1856f39990a49aab8f4f2edd043c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   transformToFollow: {fileID: 33659216}
-  smoothSpeed: 8
+  smoothSpeed: 5
   offset: {x: 0, y: 17.03, z: -13.54}
   activateAxis: Camera2
   deactivateAxis: Camera1
+  isKinematic: 1
 --- !u!1001 &1582489144
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -938,14 +947,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4418491315657511757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2d90fdcee16f2b4a82304dcdc992021, type: 3}
+  m_Script: {fileID: 11500000, guid: e26b1856f39990a49aab8f4f2edd043c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   transformToFollow: {fileID: 1185725430}
-  smoothSpeed: 8
+  smoothSpeed: 10
   offset: {x: -14.7, y: 0, z: 0}
   activateAxis: Camera1
   deactivateAxis: Camera2
+  isKinematic: 1
 --- !u!45 &4418491315657511759
 Skybox:
   m_ObjectHideFlags: 0

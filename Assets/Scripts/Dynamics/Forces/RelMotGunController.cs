@@ -15,8 +15,6 @@ namespace Dynamics.Forces
         private float shootUpIntensity = 10f;
         [SerializeField]
         private float maxVelocity = 2f;
-        [SerializeField]
-        private float drag = 1.5f;
         private bool hasShoot = false;
         public bool HasShoot
         {
@@ -28,12 +26,12 @@ namespace Dynamics.Forces
         [SerializeField]
         private Vector3 centerOfMass;
         private bool isBraking = false;
-
+        private float timeFromShoot;
         private float ballDrag = 0f;
         [SerializeField]
         private float friction = 0.2f;
         [SerializeField]
-        private float frictionCorrection = 1.25f;
+        private float frictionCorrection = 1.10f;
 
         private Vector3 lastVelocity;
         [SerializeField]
@@ -60,8 +58,15 @@ namespace Dynamics.Forces
             var currVelocity = Mathf.Abs(rigBody.velocity.z);
             if (isBraking)
             {
+                //Calculation to set the proper force in order to catch the ball
+                timeFromShoot = Time.fixedTime - timeFromShoot;
                 var frictionForceCorrection = friction * frictionCorrection * rigBody.mass * 9.81f;
-                rigBody.AddForce(transform.forward * (drag * (rigBody.velocity.z) * ball.mass + frictionForceCorrection), ForceMode.Force);
+                var dragCorrection = (-ballDrag) * ball.velocity.z / timeFromShoot;
+                var velGunCorrection = rigBody.velocity.z / timeFromShoot;
+                var velBallCorrection = ball.velocity.z / timeFromShoot;
+                rigBody.AddForce(transform.forward * (dragCorrection + frictionForceCorrection 
+                        - velGunCorrection + velBallCorrection), 
+                    ForceMode.Force);
             }
             else if (currVelocity < maxVelocity)
                 rigBody.AddForce(transform.forward * rigBody.mass * accIntensity, ForceMode.Force);
@@ -89,6 +94,7 @@ namespace Dynamics.Forces
                 Rigidbody rigBody = GetComponent<Rigidbody>();
                 ballDrag = ball.drag;
                 isBraking = true;
+                timeFromShoot = Time.fixedTime;
                 ball.AddForce(Vector3.up * shootUpIntensity, ForceMode.Impulse);
             }
         }
